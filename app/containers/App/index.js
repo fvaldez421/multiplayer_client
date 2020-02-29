@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
 import GlobalStyle from '../../global-styles';
+import SampleComponent from '../../components/SampleComponent';
 
 const AppWrapper = styled.div`
 `;
@@ -19,7 +20,7 @@ const AppWrapper = styled.div`
 export default function App() {
   return (
     <AppWrapper>
-      Hello there
+      <SampleComponent />
       {/* <Helmet
         titleTemplate="%s - React.js Boilerplate"
         defaultTitle="React.js Boilerplate"
