@@ -1,16 +1,15 @@
 {
-  "name": "react-boilerplate",
+  "name": "multiplayer_client",
   "version": "4.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
+    "url": "git@github.com:fvaldez421/multiplayer_client.git"
   },
   "engines": {
     "npm": ">=5",
     "node": ">=8.15.1"
   },
-  "author": "Max Stoiber",
+  "author": "Frank Valdez",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
