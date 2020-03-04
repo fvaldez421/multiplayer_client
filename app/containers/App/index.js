@@ -20,6 +20,7 @@ import makeSelectHomePage from '../HomePage/selectors';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { AppContentWrapper } from '../../components/styleUtils/AppContentWrapper';
 
 
 const AppWrapper = styled.div`
@@ -33,25 +34,28 @@ const AppWrapper = styled.div`
 const App = props => {
   return (
     <AppWrapper>
-      <Navigation />
+      <Navigation location={props.location || {}} />
       <Helmet
         titleTemplate="%s - End of Time"
         defaultTitle="End of Time"
       >
         <meta name="description" content="A series of multiplayer games." />
       </Helmet>
+        <AppContentWrapper>
       <Switch>
         <Route exact path="/home" component={HomePage} />
         <Route exact path="/admin" component={AdminPage} />
         <Route path="*" component={NotFoundPage} />
       </Switch>
+        </AppContentWrapper>
       <GlobalStyle />
     </AppWrapper>
   );
 }
 
 const mapStateToProps = createStructuredSelector({
-	homePage: makeSelectHomePage()
+  homePage: makeSelectHomePage(),
+  location: state => state.router.location
 });
 
 function mapDispatchToProps(dispatch) {

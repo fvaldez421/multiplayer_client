@@ -15,30 +15,34 @@ import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectAdminPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import { loadLobbiesRequest } from './actions';
 
-export function AdminPage() {
+
+
+export function AdminPage(props) {
   useInjectReducer({ key: 'adminPage', reducer });
   useInjectSaga({ key: 'adminPage', saga });
-
+  const onClick = () => {
+    props.loadLobbiesRequest({ lobbyType: 'risk' })
+  }
   return (
     <div>
       This is the admin page to view and manage lobbies
+      <button onClick={onClick}>Test Me</button>
     </div>
   );
 }
 
 AdminPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  loadLobbiesRequest: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   adminPage: makeSelectAdminPage(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
+const mapDispatchToProps = {
+  loadLobbiesRequest
 }
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
