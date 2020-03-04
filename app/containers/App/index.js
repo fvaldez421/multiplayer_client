@@ -12,15 +12,28 @@ import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
 import GlobalStyle from '../../global-styles';
-import SampleComponent from '../../components/SampleComponent';
+import HomePage from '../HomePage';
+import AdminPage from '../AdminPage';
+import Navigation from '../../components/Navigation';
+import makeSelectHomePage from '../HomePage/selectors';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
 
 const AppWrapper = styled.div`
+  display: block;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+	background-color: lemonchiffon;
 `;
 
-export default function App() {
+const App = props => {
+  console.log(props)
   return (
     <AppWrapper>
-      <SampleComponent />
+      <Navigation />
       {/* <Helmet
         titleTemplate="%s - React.js Boilerplate"
         defaultTitle="React.js Boilerplate"
@@ -28,9 +41,27 @@ export default function App() {
         <meta name="description" content="A React.js Boilerplate application" />
       </Helmet> */}
       <Switch>
-        {/* <Route exact path="/" component={HomePage} /> */}
+        <Route exact path="/home" component={HomePage} />
+        <Route exact path="/admin" component={AdminPage} />
       </Switch>
       <GlobalStyle />
     </AppWrapper>
   );
 }
+
+const mapStateToProps = createStructuredSelector({
+	homePage: makeSelectHomePage()
+});
+
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch
+	};
+}
+
+const withConnect = connect(
+	mapStateToProps,
+	mapDispatchToProps
+);
+
+export default compose(withConnect)(App);
