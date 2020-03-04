@@ -64,7 +64,7 @@
 		"intl": "1.2.5",
 		"invariant": "2.2.4",
 		"ip": "1.1.5",
-		"lodash": "4.17.11",
+		"lodash": ">=4.17.12",
 		"minimist": "1.2.0",
 		"prettier": "^1.19.1",
 		"prop-types": "15.7.2",
@@ -143,6 +143,8 @@
 		"webpack-cli": "3.3.0",
 		"webpack-dev-middleware": "3.6.2",
 		"webpack-hot-middleware": "2.24.3",
-		"webpack-pwa-manifest": "4.0.0"
+		"webpack-pwa-manifest": "4.0.0",
+		"serialize-javascript": ">=2.1.1",
+		"set-value": ">=2.0.1"
 	}
 }
