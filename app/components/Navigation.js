@@ -43,7 +43,7 @@ const NavLink = styled(Link)`
 const Navigation = props => {
   return (
     <NavContainer>
-      <Logo>Multiplayer App v1</Logo>
+      <Logo>End of Time</Logo>
       <NavWrapper>
         <NavLink to="/home">Home</NavLink>
         <NavLink to="/admin">Admin</NavLink>

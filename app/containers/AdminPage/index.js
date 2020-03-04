@@ -15,16 +15,15 @@ import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectAdminPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { AppContentWrapper } from '../../components/styleUtils/AppContentWrapper';
 
 export function AdminPage() {
   useInjectReducer({ key: 'adminPage', reducer });
   useInjectSaga({ key: 'adminPage', saga });
 
   return (
-    <AppContentWrapper>
+    <div>
       This is the admin page to view and manage lobbies
-    </AppContentWrapper>
+    </div>
   );
 }
 

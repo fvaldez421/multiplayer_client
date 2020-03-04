@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
 import GlobalStyle from '../../global-styles';
+import NotFoundPage from '../NotFoundPage';
 import HomePage from '../HomePage';
 import AdminPage from '../AdminPage';
 import Navigation from '../../components/Navigation';
@@ -43,6 +44,7 @@ const App = props => {
       <Switch>
         <Route exact path="/home" component={HomePage} />
         <Route exact path="/admin" component={AdminPage} />
+        <Route path="*" component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
     </AppWrapper>

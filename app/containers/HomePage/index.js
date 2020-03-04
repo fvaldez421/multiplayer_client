@@ -16,7 +16,6 @@ import { useInjectReducer } from "utils/injectReducer";
 import makeSelectHomePage from "./selectors";
 import reducer from "./reducer";
 import saga from "./saga";
-import { AppContentWrapper } from "../../components/styleUtils/AppContentWrapper";
 
 
 export function HomePage() {
@@ -24,9 +23,9 @@ export function HomePage() {
 	useInjectSaga({ key: "homePage", saga });
 
 	return (
-		<AppContentWrapper>
+		<div>
 			This is the home page
-		</AppContentWrapper>
+		</div>
 	)
 }
 
