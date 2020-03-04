@@ -5,17 +5,30 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-import H1 from 'components/H1';
-import messages from './messages';
+const MessageWrapper = styled.div`
+  display: block;
+  margin: auto;
+  > h1 {
+    margin: 0;
+    padding: 100px 0;
+    text-align: center;
+  }
+  > a {
+    display: block;
+    margin: auto;
+    width: 100px;
+    text-align: center;
+  }
+`;
 
 export default function NotFound() {
   return (
-    <article>
-      <H1>
-        <FormattedMessage {...messages.header} />
-      </H1>
-    </article>
+    <MessageWrapper>
+      <h1>Couldn't find what you were looking for :(</h1>
+      <Link to="/home">Back Home</Link>
+    </MessageWrapper>
   );
 }

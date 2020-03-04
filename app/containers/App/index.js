@@ -31,16 +31,15 @@ const AppWrapper = styled.div`
 `;
 
 const App = props => {
-  console.log(props)
   return (
     <AppWrapper>
       <Navigation />
-      {/* <Helmet
-        titleTemplate="%s - React.js Boilerplate"
-        defaultTitle="React.js Boilerplate"
+      <Helmet
+        titleTemplate="%s - End of Time"
+        defaultTitle="End of Time"
       >
-        <meta name="description" content="A React.js Boilerplate application" />
-      </Helmet> */}
+        <meta name="description" content="A series of multiplayer games." />
+      </Helmet>
       <Switch>
         <Route exact path="/home" component={HomePage} />
         <Route exact path="/admin" component={AdminPage} />
