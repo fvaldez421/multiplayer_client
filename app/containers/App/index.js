@@ -9,10 +9,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import GlobalStyle from '../../global-styles';
 import NotFoundPage from '../NotFoundPage';
+import LandingPage from '../LandingPage';
 import HomePage from '../HomePage';
 import AdminPage from '../AdminPage';
 import Navigation from '../../components/Navigation';
@@ -28,7 +29,8 @@ const AppWrapper = styled.div`
   min-height: 100vh;
   height: 100%;
   width: 100%;
-	background-color: lemonchiffon;
+  background-color: #888888;
+	/* background-color: lemonchiffon; */
 `;
 
 const App = props => {
@@ -41,13 +43,15 @@ const App = props => {
       >
         <meta name="description" content="A series of multiplayer games." />
       </Helmet>
-        <AppContentWrapper>
-      <Switch>
-        <Route exact path="/home" component={HomePage} />
-        <Route exact path="/admin" component={AdminPage} />
-        <Route path="*" component={NotFoundPage} />
-      </Switch>
-        </AppContentWrapper>
+      <AppContentWrapper>
+        <Switch>
+          <Route exact path="/landing" component={LandingPage} />
+          <Route exact path="/home" component={HomePage} />
+          <Route exact path="/admin" component={AdminPage} />
+          <Redirect from="/" to="/landing" />
+          <Route path="*" component={NotFoundPage} />
+        </Switch>
+      </AppContentWrapper>
       <GlobalStyle />
     </AppWrapper>
   );
@@ -59,14 +63,14 @@ const mapStateToProps = createStructuredSelector({
 });
 
 function mapDispatchToProps(dispatch) {
-	return {
-		dispatch
-	};
+  return {
+    dispatch
+  };
 }
 
 const withConnect = connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 );
 
 export default compose(withConnect)(App);
