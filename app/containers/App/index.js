@@ -21,16 +21,15 @@ import makeSelectHomePage from '../HomePage/selectors';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { AppContentWrapper } from '../../components/styleUtils/AppContentWrapper';
 
 
 const AppWrapper = styled.div`
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   height: 100%;
   width: 100%;
-  background-color: #888888;
-	/* background-color: lemonchiffon; */
+	background-color: lemonchiffon;
 `;
 
 const App = props => {
@@ -43,7 +42,6 @@ const App = props => {
       >
         <meta name="description" content="A series of multiplayer games." />
       </Helmet>
-      <AppContentWrapper>
         <Switch>
           <Route exact path="/landing" component={LandingPage} />
           <Route exact path="/home" component={HomePage} />
@@ -51,7 +49,6 @@ const App = props => {
           <Redirect from="/" to="/landing" />
           <Route path="*" component={NotFoundPage} />
         </Switch>
-      </AppContentWrapper>
       <GlobalStyle />
     </AppWrapper>
   );
