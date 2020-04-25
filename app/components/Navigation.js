@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import UserSettings from './UserSettings';
 
 const NavContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 46px;
+  height: 58px;
   width: 100%;
   background-color: #000000;
-  color: #ffffff;
+  * {
+    color: #ffffff;
+  }
+`;
+
+const NavWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const Logo = styled.div`
-  height: 100%;
   padding: 0 20px;
   font-size: 26px;
   line-height: 45px;
   font-weight: 800;
 `;
 
-const NavWrapper = styled.div`
+const LinksWrapper = styled.div`
   flex: 8 8;
-`;
-
-const UserSettingsWrap = styled.div`
-  width: 200px;
 `;
 
 const NavLink = styled(Link)`
@@ -42,18 +43,21 @@ const NavLink = styled(Link)`
   }
 `;
 
+const StyledUserSettings = styled(UserSettings)`
+  width: 200px;
+`;
 
 const Navigation = ({ location: { pathname='' } }) => {
   return (
     <NavContainer>
-      <Logo>End of Time</Logo>
       <NavWrapper>
-        <NavLink isActive={pathname === "/home"} to="/home">Home</NavLink>
-        <NavLink isActive={pathname === "/admin"} to="/admin">Admin</NavLink>
+        <Logo>End of Time</Logo>
+        <LinksWrapper>
+          <NavLink isActive={pathname === "/home"} to="/home">Home</NavLink>
+          <NavLink isActive={pathname === "/admin"} to="/admin">Admin</NavLink>
+        </LinksWrapper>
+        <StyledUserSettings />
       </NavWrapper>
-      <UserSettingsWrap>
-        Login?
-      </UserSettingsWrap>
     </NavContainer>
   )
 };
