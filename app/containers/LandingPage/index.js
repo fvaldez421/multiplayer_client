@@ -4,23 +4,26 @@
  *
  */
 
-import React, { memo } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Helmet } from "react-helmet";
-import { createStructuredSelector } from "reselect";
-import styled from "styled-components";
-import { compose } from "redux";
+import React, { memo } from 'react';
+// import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import { createStructuredSelector } from 'reselect';
+import styled from 'styled-components';
+import { compose } from 'redux';
 
-import { useInjectSaga } from "utils/injectSaga";
-import { useInjectReducer } from "utils/injectReducer";
-import makeSelectLandingPage from "./selectors";
-import reducer from "./reducer";
-import saga from "./saga";
-import AuthForm from "./AuthForm";
-import { PageWrapper as BaseWrapper, ResponsiveWrapper } from "../../components/styleUtils/Wrappers";
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+import makeSelectLandingPage from './selectors';
+import reducer from './reducer';
+import saga from './saga';
+import AuthForm from './AuthForm';
+import {
+	PageWrapper as BaseWrapper,
+	ResponsiveWrapper,
+} from '../../components/styleUtils/Wrappers';
 import desertImage from '../../assets/desert-ground-bg.jpg';
-
+import { BREAKPOINT_MOBILE_LARGE } from '../../config/constants';
 
 const PageWrapper = styled(BaseWrapper)`
 	background-image: url(${desertImage});
@@ -31,7 +34,10 @@ const PageWrapper = styled(BaseWrapper)`
 
 const WelcomeBanner = styled.div`
 	display: block;
-	margin: 10vh 0 6vh;
+	margin: 12vh 0 4vh;
+	@media only screen and (max-width: ${BREAKPOINT_MOBILE_LARGE}px) {
+		padding: 0 10px;
+	}
 	> h1 {
 		padding: 0;
 	}
@@ -42,12 +48,12 @@ const WelcomeBanner = styled.div`
 `;
 
 export function LandingPage() {
-	useInjectReducer({ key: "landingPage", reducer });
-	useInjectSaga({ key: "landingPage", saga });
+	useInjectReducer({ key: 'landingPage', reducer });
+	useInjectSaga({ key: 'landingPage', saga });
 
-	const onSubmit = () => {
-		console.log('')
-	}
+	// const onSubmit = () => {
+	// 	console.log('')
+	// }
 
 	return (
 		<PageWrapper>
@@ -60,31 +66,24 @@ export function LandingPage() {
 				<WelcomeBanner>
 					<h1>Welcome to End of Time</h1>
 					<p>
-						This is a multiplayer gaming platform where you can create lobbies, 
+						This is a multiplayer gaming platform where you can create lobbies,
 						invite your friends and play together!
 					</p>
 				</WelcomeBanner>
-				
+
 				<AuthForm />
-			
 			</ResponsiveWrapper>
 		</PageWrapper>
 	);
 }
 
-LandingPage.propTypes = {
-	dispatch: PropTypes.func.isRequired
-};
+LandingPage.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({
-	landingPage: makeSelectLandingPage()
+	landingPage: makeSelectLandingPage(),
 });
 
-function mapDispatchToProps(dispatch) {
-	return {
-		dispatch
-	};
-}
+const mapDispatchToProps = {};
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
