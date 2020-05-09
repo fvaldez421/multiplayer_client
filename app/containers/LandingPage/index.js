@@ -51,9 +51,10 @@ export function LandingPage() {
 	useInjectReducer({ key: 'landingPage', reducer });
 	useInjectSaga({ key: 'landingPage', saga });
 
-	// const onSubmit = () => {
-	// 	console.log('')
-	// }
+	const onSubmit = (params) => {
+		// eslint-ignore-next-line
+		console.log('form submit success', params);
+	};
 
 	return (
 		<PageWrapper>
@@ -71,7 +72,7 @@ export function LandingPage() {
 					</p>
 				</WelcomeBanner>
 
-				<AuthForm />
+				<AuthForm onSubmit={onSubmit} />
 			</ResponsiveWrapper>
 		</PageWrapper>
 	);

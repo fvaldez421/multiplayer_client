@@ -1,13 +1,48 @@
 import React from 'react';
 // import PropTypes from 'prop-types'
 import styled from 'styled-components';
-import { Form, Label, Input } from '../../components/Forms';
+import { Form, Label, Input, FormError } from '../../components/Forms';
 import { FORMS } from './AuthForm';
 import { BaseButton } from '../../components/Buttons';
 import {
 	BREAKPOINT_MOBILE_LARGE,
 	BREAKPOINT_MOBILE_SMALL,
 } from '../../config/constants';
+
+// ============= Constants =============
+const INPUTS = {
+	username: {
+		label: 'Username',
+		name: 'username',
+		type: 'text',
+	},
+	password: {
+		label: 'Password',
+		name: 'password',
+		type: 'password',
+	},
+	confirm: {
+		label: 'Confirm Password',
+		name: 'confirm',
+		type: 'password',
+	},
+};
+
+const FORM_DESCRIPTIONS = {
+	basic: `With the basic signup, you'll be able to play, but wont be able to reuse claim you username or save
+          any information. Don't worry though, your realtime gameplay will be saved as long as the game is live
+          in case you're disconnected.`,
+	full: `With the full signup, we'll confirm your email and save your username so we can save your scores for 
+         you. This way you and your friends can look back at the good ol' days`,
+	login: `You shouldn't have to log in too often, unless you manually log out or clear your browser data.`,
+};
+
+// =========== Styled Components =============
+const FormWrapper = styled.div`
+	background-color: #ffffff;
+	border-radius: 8px;
+	overflow: hidden;
+`;
 
 const PillContainer = styled.div`
 	width: 100%;
@@ -98,6 +133,15 @@ const StyledForm = styled(Form)`
 	}
 `;
 
+const FormDescription = styled(
+	({ className = '', activeTab = FORMS.basic }) => (
+		<div className={className}>{FORM_DESCRIPTIONS[activeTab]}</div>
+	),
+)`
+	padding: 25px 20px 0;
+`;
+
+// ============ React Components ==============
 const FormToggle = ({ activeTab = FORMS.basic, onUpdate }) => (
 	<PillContainer>
 		<Pill
@@ -117,28 +161,11 @@ const FormToggle = ({ activeTab = FORMS.basic, onUpdate }) => (
 	</PillContainer>
 );
 
-const INPUTS = {
-	username: {
-		label: 'Username',
-		name: 'username',
-		type: 'text',
-	},
-	password: {
-		label: 'Password',
-		name: 'password',
-		type: 'password',
-	},
-	confirm: {
-		label: 'Confirm Password',
-		name: 'confirm',
-		type: 'password',
-	},
-};
-
 const FormBuilder = ({
 	isLogin,
 	signupType,
 	formState = {},
+	errorState = {},
 	onChange,
 	onSubmit,
 }) => {
@@ -152,7 +179,12 @@ const FormBuilder = ({
 		<StyledForm hasHeader onSubmit={onSubmit}>
 			{fields.map(({ label, name, type }) => (
 				<>
-					<Label htmlFor={name}>{label}</Label>
+					<Label htmlFor={name}>
+						{label}
+						{errorState[name] && (
+							<FormError>&nbsp;{errorState[name]}</FormError>
+						)}
+					</Label>
 					<Input
 						id={name}
 						name={name}
@@ -160,30 +192,39 @@ const FormBuilder = ({
 						placeholder={name}
 						value={formState[name]}
 						onChange={onChange}
+						hasError={!!errorState[name]}
 					/>
 				</>
 			))}
-			<BaseButton>Login</BaseButton>
+			<BaseButton id="FormSubmit" type="submit">
+				Login
+			</BaseButton>
 		</StyledForm>
 	);
 };
 
 FormBuilder.propTypes = {};
 
-export const UniversalForm = ({ formType, updateFormType, ...rest }) => {
-	const isLogin = formType === FORMS.login;
+export const UniversalForm = ({
+	className = '',
+	formType: activeTab,
+	updateFormType,
+	...rest
+}) => {
+	const isLogin = activeTab === FORMS.login;
 	return (
-		<>
+		<FormWrapper className={className}>
 			{isLogin ? (
 				<PillContainer>
 					<Pill active>Login</Pill>
 					<PillShadow />
 				</PillContainer>
 			) : (
-				<FormToggle activeTab={formType} onUpdate={updateFormType} />
+				<FormToggle activeTab={activeTab} onUpdate={updateFormType} />
 			)}
-			<FormBuilder isLogin={isLogin} signupType={formType} {...rest} />
-		</>
+			<FormDescription activeTab={activeTab} />
+			<FormBuilder isLogin={isLogin} signupType={activeTab} {...rest} />
+		</FormWrapper>
 	);
 };
 

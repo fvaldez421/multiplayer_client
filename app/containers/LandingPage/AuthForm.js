@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import useComplexState from '../../hooks/useComplexState';
 import { UniversalForm } from './Forms';
-import { COLORS, BREAKPOINT_MOBILE_LARGE } from '../../config/constants';
+import {
+	COLORS,
+	BREAKPOINT_MOBILE_LARGE,
+	regexp,
+} from '../../config/constants';
 
+// ========== Styled Components ==========
 const FormContainer = styled.div`
 	background-color: rgba(255, 255, 255, 0.8);
 	display: block;
@@ -18,6 +23,7 @@ const FormContainer = styled.div`
 `;
 
 const FormHeader = styled.div`
+	padding-bottom: 10px;
 	> div {
 		display: flex;
 		flex-direction: row;
@@ -43,6 +49,7 @@ const LoginBtn = styled.span`
 	user-select: none;
 `;
 
+// ========== Constants ===========
 export const FORMS = {
 	basic: 'basic',
 	full: 'full',
@@ -53,30 +60,88 @@ const basicFormDefault = {
 	username: '',
 };
 
-const AuthForm = () => {
+// ========== Helper Functions ===========
+function validateFormFields(type, formState, onSuccess, onError) {
+	const { username = '', password = '', confirm = '' } = formState;
+	const errors = {
+		username: null,
+		password: null,
+		confirm: null,
+	};
+	// on signup basic and full
+	if (type !== FORMS.login) {
+		if (username.match(regexp.login)) {
+			errors.username = '(Invalid characters in your username)';
+		} else if (username.length < 5) {
+			errors.username = '(Not long enough)';
+		}
+	}
+	// only on signup full
+	if (type === FORMS.full) {
+		if (password.match(regexp.login)) {
+			errors.password = '(Invalid characters in your password)';
+		} else if (password.length < 6) {
+			errors.password = '(Not long enough)';
+			errors.confirm = "(Passwords don't match)";
+		}
+		if (password !== confirm) {
+			errors.confirm = "(Passwords don't match)";
+		}
+	}
+	// checks if any keys in the error object are truthy
+	for (const key in errors) {
+		if (errors[key]) return onError(errors);
+	}
+	return onSuccess({});
+}
+
+// ============ React Components ==============
+const AuthForm = ({ onSubmit }) => {
 	const [formType, setFormType] = useState(FORMS.basic);
-	const { state: formState, setState: setFormState } = useComplexState({
-		...basicFormDefault,
-	});
+	const {
+		state: formState,
+		setState: setFormState,
+		forceState: forceFormState,
+	} = useComplexState({ ...basicFormDefault });
+	const {
+		state: errorState,
+		setState: setErrorState,
+		forceState: forceErrorState,
+	} = useComplexState({});
 
 	const updateFormType = (nextType) => {
 		setFormType(nextType);
+		forceErrorState({});
 		const { username = '' } = formState;
-		if (nextType === FORMS.basic) setFormState({ username });
+		if (nextType === FORMS.basic) forceFormState({ username });
 		if (nextType === FORMS.full)
-			setFormState({ username, password: '', confirm: '' });
-		if (nextType === FORMS.login) setFormState({ username, password: '' });
+			forceFormState({ username, password: '', confirm: '' });
+		if (nextType === FORMS.login) forceFormState({ username, password: '' });
 	};
 
 	const updateFormField = (e) => {
-		const {
-			target: { name, value },
-		} = e;
-		setFormState({ [name]: value });
+		const { target: { name = '', value = '' } = {} } = e;
+		const updatedState = {
+			...formState,
+			[name]: name === 'username' ? value.trim() : value,
+		};
+		if (errorState.attempted) {
+			validateFormFields(
+				formType,
+				updatedState,
+				forceErrorState,
+				setErrorState,
+			);
+		}
+		setFormState(updatedState);
 	};
 
 	const onFormSubmit = (e) => {
 		e.preventDefault();
+		const onSuccess = () => onSubmit({ ...formState });
+		const onError = (errors) => setErrorState({ ...errors, attempted: true });
+
+		validateFormFields(formType, formState, onSuccess, onError);
 	};
 
 	const formTypeOption = formType === FORMS.login ? FORMS.basic : FORMS.login;
@@ -99,6 +164,7 @@ const AuthForm = () => {
 			<UniversalForm
 				formType={formType}
 				formState={formState}
+				errorState={errorState}
 				onChange={updateFormField}
 				onSubmit={onFormSubmit}
 				updateFormType={updateFormType}
