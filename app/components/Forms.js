@@ -10,13 +10,19 @@ export const Form = styled.form`
 		padding: 10px;
 	}
 `;
+
 export const Label = styled.label`
 	line-height: 24px;
 `;
 
+export const FormError = styled.span`
+	color: red;
+`;
+
 export const Input = styled.input`
-	border: 1px solid lightgray;
 	border-radius: 8px;
+	border: 1px solid;
+	border-color: ${({ hasError }) => (hasError ? 'red' : 'lightgrey')};
 	width: 100%;
 	height: 38px;
 	margin: 5px 0;
@@ -27,6 +33,6 @@ export const Input = styled.input`
 	&:active,
 	&:focus,
 	&:focus:active {
-		border-color: ${COLORS.lightblue};
+		border-color: ${({ hasError }) => (hasError ? 'red' : COLORS.lightblue)};
 	}
 `;
