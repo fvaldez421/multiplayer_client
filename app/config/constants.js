@@ -8,3 +8,8 @@ export const COLORS = {
 	lightblue: '#00c0ff',
 	strongBlue: '#0074ca',
 };
+
+export const regexp = {
+	login: /([\`\~\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\<\.\>\/\?])/ig
+}
+

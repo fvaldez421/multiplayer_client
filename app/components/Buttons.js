@@ -6,6 +6,8 @@ export const BaseButton = styled.button`
 	background-color: lightgrey;
 	color: #000000;
 	height: 38px;
+	font-size: 16px;
+	font-weight: 600;
 	line-height: 38px;
 	padding: 0 15px;
 	cursor: pointer;
