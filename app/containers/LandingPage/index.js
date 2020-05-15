@@ -22,7 +22,7 @@ import {
 	PageWrapper as BaseWrapper,
 	ResponsiveWrapper,
 } from '../../components/styleUtils/Wrappers';
-import desertImage from '../../assets/desert-ground-bg.jpg';
+import desertImage from '../../images/desert-ground-bg.jpg';
 import { BREAKPOINT_MOBILE_LARGE } from '../../config/constants';
 
 const PageWrapper = styled(BaseWrapper)`
@@ -51,11 +51,6 @@ export function LandingPage() {
 	useInjectReducer({ key: 'landingPage', reducer });
 	useInjectSaga({ key: 'landingPage', saga });
 
-	const onSubmit = (params) => {
-		// eslint-ignore-next-line
-		console.log('form submit success', params);
-	};
-
 	return (
 		<PageWrapper>
 			<ResponsiveWrapper>
@@ -72,7 +67,7 @@ export function LandingPage() {
 					</p>
 				</WelcomeBanner>
 
-				<AuthForm onSubmit={onSubmit} />
+				<AuthForm />
 			</ResponsiveWrapper>
 		</PageWrapper>
 	);

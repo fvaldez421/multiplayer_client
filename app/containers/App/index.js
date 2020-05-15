@@ -11,6 +11,9 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import GlobalStyle from '../../global-styles';
 import NotFoundPage from '../NotFoundPage';
 import LandingPage from '../LandingPage';
@@ -18,56 +21,47 @@ import HomePage from '../HomePage';
 import AdminPage from '../AdminPage';
 import Navigation from '../../components/Navigation';
 import makeSelectHomePage from '../HomePage/selectors';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-
+import { VerifiedRoute, AuthedRoute } from '../../components/AuthRoutes';
 
 const AppWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  height: 100%;
-  width: 100%;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	height: 100%;
+	width: 100%;
 	background-color: lemonchiffon;
 `;
 
-const App = props => {
-  return (
-    <AppWrapper>
-      <Navigation location={props.location || {}} />
-      <Helmet
-        titleTemplate="%s - End of Time"
-        defaultTitle="End of Time"
-      >
-        <meta name="description" content="A series of multiplayer games." />
-      </Helmet>
-        <Switch>
-          <Route exact path="/landing" component={LandingPage} />
-          <Route exact path="/home" component={HomePage} />
-          <Route exact path="/admin" component={AdminPage} />
-          <Redirect from="/" to="/landing" />
-          <Route path="*" component={NotFoundPage} />
-        </Switch>
-      <GlobalStyle />
-    </AppWrapper>
-  );
-}
+const App = ({ location = {} }) => (
+	<AppWrapper>
+		<Navigation location={location} />
+		<Helmet titleTemplate="%s - End of Time" defaultTitle="End of Time">
+			<meta name="description" content="A series of multiplayer games." />
+		</Helmet>
+		<Switch>
+			<Route exact path="/landing" component={LandingPage} />
+
+			<AuthedRoute exact path="/home" component={HomePage} />
+			<VerifiedRoute exact path="/admin" component={AdminPage} />
+
+			<Redirect from="/" to="/landing" />
+			<Route path="*" component={NotFoundPage} />
+		</Switch>
+		<GlobalStyle />
+	</AppWrapper>
+);
 
 const mapStateToProps = createStructuredSelector({
-  homePage: makeSelectHomePage(),
-  location: state => state.router.location
+	homePage: makeSelectHomePage(),
+	location: (state) => state.router.location,
 });
 
 function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
+	return {
+		dispatch,
+	};
 }
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(withConnect)(App);

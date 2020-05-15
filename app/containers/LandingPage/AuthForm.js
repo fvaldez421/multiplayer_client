@@ -5,8 +5,9 @@ import { UniversalForm } from './Forms';
 import {
 	COLORS,
 	BREAKPOINT_MOBILE_LARGE,
-	regexp,
+	REGEXPS,
 } from '../../config/constants';
+import AuthWrapper from '../Auth/AuthWrapper';
 
 // ========== Styled Components ==========
 const FormContainer = styled.div`
@@ -44,13 +45,13 @@ const FormHeader = styled.div`
 
 const LoginBtn = styled.span`
 	cursor: pointer;
-	color: ${COLORS.strongBlue};
+	color: ${COLORS.primaryBlue};
 	font-weight: 600;
 	user-select: none;
 `;
 
 // ========== Constants ===========
-export const FORMS = {
+export const FORM_TYPES = {
 	basic: 'basic',
 	full: 'full',
 	login: 'login',
@@ -69,16 +70,16 @@ function validateFormFields(type, formState, onSuccess, onError) {
 		confirm: null,
 	};
 	// on signup basic and full
-	if (type !== FORMS.login) {
-		if (username.match(regexp.login)) {
+	if (type !== FORM_TYPES.login) {
+		if (username.match(REGEXPS.LOGIN_REGEXP)) {
 			errors.username = '(Invalid characters in your username)';
 		} else if (username.length < 5) {
 			errors.username = '(Not long enough)';
 		}
 	}
 	// only on signup full
-	if (type === FORMS.full) {
-		if (password.match(regexp.login)) {
+	if (type === FORM_TYPES.full) {
+		if (password.match(REGEXPS.LOGIN_REGEXP)) {
 			errors.password = '(Invalid characters in your password)';
 		} else if (password.length < 6) {
 			errors.password = '(Not long enough)';
@@ -96,8 +97,8 @@ function validateFormFields(type, formState, onSuccess, onError) {
 }
 
 // ============ React Components ==============
-const AuthForm = ({ onSubmit }) => {
-	const [formType, setFormType] = useState(FORMS.basic);
+const AuthForm = ({ signupRequest, loginRequest }) => {
+	const [formType, setFormType] = useState(FORM_TYPES.basic);
 	const {
 		state: formState,
 		setState: setFormState,
@@ -113,10 +114,11 @@ const AuthForm = ({ onSubmit }) => {
 		setFormType(nextType);
 		forceErrorState({});
 		const { username = '' } = formState;
-		if (nextType === FORMS.basic) forceFormState({ username });
-		if (nextType === FORMS.full)
+		if (nextType === FORM_TYPES.basic) forceFormState({ username });
+		if (nextType === FORM_TYPES.full)
 			forceFormState({ username, password: '', confirm: '' });
-		if (nextType === FORMS.login) forceFormState({ username, password: '' });
+		if (nextType === FORM_TYPES.login)
+			forceFormState({ username, password: '' });
 	};
 
 	const updateFormField = (e) => {
@@ -138,14 +140,18 @@ const AuthForm = ({ onSubmit }) => {
 
 	const onFormSubmit = (e) => {
 		e.preventDefault();
-		const onSuccess = () => onSubmit({ ...formState });
+		const onSuccess = () => {
+			if (formType !== FORM_TYPES.login) return signupRequest({ ...formState });
+			return loginRequest({ ...formState });
+		};
 		const onError = (errors) => setErrorState({ ...errors, attempted: true });
 
 		validateFormFields(formType, formState, onSuccess, onError);
 	};
 
-	const formTypeOption = formType === FORMS.login ? FORMS.basic : FORMS.login;
-	const formTextOption = formType === FORMS.login ? 'Signup?' : 'Login?';
+	const formTypeOption =
+		formType === FORM_TYPES.login ? FORM_TYPES.basic : FORM_TYPES.login;
+	const formTextOption = formType === FORM_TYPES.login ? 'Signup?' : 'Login?';
 
 	return (
 		<FormContainer>
@@ -173,4 +179,8 @@ const AuthForm = ({ onSubmit }) => {
 	);
 };
 
-export default AuthForm;
+const WrappedAuthForm = (props) => (
+	<AuthWrapper WrappedComponent={AuthForm} {...props} />
+);
+
+export default WrappedAuthForm;

@@ -2,8 +2,8 @@ import React from 'react';
 // import PropTypes from 'prop-types'
 import styled from 'styled-components';
 import { Form, Label, Input, FormError } from '../../components/Forms';
-import { FORMS } from './AuthForm';
-import { BaseButton } from '../../components/Buttons';
+import { FORM_TYPES } from './AuthForm';
+import { PrimaryButton } from '../../components/Buttons';
 import {
 	BREAKPOINT_MOBILE_LARGE,
 	BREAKPOINT_MOBILE_SMALL,
@@ -134,7 +134,7 @@ const StyledForm = styled(Form)`
 `;
 
 const FormDescription = styled(
-	({ className = '', activeTab = FORMS.basic }) => (
+	({ className = '', activeTab = FORM_TYPES.basic }) => (
 		<div className={className}>{FORM_DESCRIPTIONS[activeTab]}</div>
 	),
 )`
@@ -142,19 +142,19 @@ const FormDescription = styled(
 `;
 
 // ============ React Components ==============
-const FormToggle = ({ activeTab = FORMS.basic, onUpdate }) => (
+const FormToggle = ({ activeTab = FORM_TYPES.basic, onUpdate }) => (
 	<PillContainer>
 		<Pill
 			id="basic-form-toggle"
-			active={activeTab === FORMS.basic}
-			onClick={() => onUpdate(FORMS.basic)}
+			active={activeTab === FORM_TYPES.basic}
+			onClick={() => onUpdate(FORM_TYPES.basic)}
 		>
 			<div>Easy Signup</div>
 		</Pill>
 		<Pill
 			id="full-form-toggle"
-			active={activeTab === FORMS.full}
-			onClick={() => onUpdate(FORMS.full)}
+			active={activeTab === FORM_TYPES.full}
+			onClick={() => onUpdate(FORM_TYPES.full)}
 		>
 			<div>Full Signup</div>
 		</Pill>
@@ -169,23 +169,24 @@ const FormBuilder = ({
 	onChange,
 	onSubmit,
 }) => {
-	const showPwField = isLogin || signupType === FORMS.full;
+	const showPwField = isLogin || signupType === FORM_TYPES.full;
 	const fields = [INPUTS.username];
 
 	if (showPwField) fields.push(INPUTS.password);
-	if (signupType === FORMS.full) fields.push(INPUTS.confirm);
+	if (signupType === FORM_TYPES.full) fields.push(INPUTS.confirm);
 
 	return (
 		<StyledForm hasHeader onSubmit={onSubmit}>
 			{fields.map(({ label, name, type }) => (
 				<>
-					<Label htmlFor={name}>
+					<Label key={`${name}-label`} htmlFor={name}>
 						{label}
 						{errorState[name] && (
 							<FormError>&nbsp;{errorState[name]}</FormError>
 						)}
 					</Label>
 					<Input
+						key={`${name}-input`}
 						id={name}
 						name={name}
 						type={type}
@@ -196,9 +197,9 @@ const FormBuilder = ({
 					/>
 				</>
 			))}
-			<BaseButton id="FormSubmit" type="submit">
+			<PrimaryButton id="FormSubmit" type="submit">
 				Login
-			</BaseButton>
+			</PrimaryButton>
 		</StyledForm>
 	);
 };
@@ -211,7 +212,7 @@ export const UniversalForm = ({
 	updateFormType,
 	...rest
 }) => {
-	const isLogin = activeTab === FORMS.login;
+	const isLogin = activeTab === FORM_TYPES.login;
 	return (
 		<FormWrapper className={className}>
 			{isLogin ? (

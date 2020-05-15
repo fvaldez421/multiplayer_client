@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { COLORS } from '../config/constants';
 
 export const BaseButton = styled.button`
 	border: none;
@@ -11,13 +12,18 @@ export const BaseButton = styled.button`
 	line-height: 38px;
 	padding: 0 15px;
 	cursor: pointer;
-	&:hover {
+	outline: none;
+	&:hover,
+	&:focus {
 		filter: brightness(95%);
 	}
-	&:focus {
-		outline: none;
-	}
-	&:active {
+	&:active,
+	&:focus:active {
 		filter: brightness(90%);
 	}
+`;
+
+export const PrimaryButton = styled(BaseButton)`
+	background-color: ${COLORS.primaryBlue};
+	color: #ffffff;
 `;

@@ -5,11 +5,11 @@ export const BREAKPOINT_DESKTOP_SMALL = 1092;
 export const BREAKPOINT_DESKTOP_LARGE = 1320;
 
 export const COLORS = {
-	lightblue: '#00c0ff',
-	strongBlue: '#0074ca',
+	secondaryBlue: '#00c0ff',
+	primaryBlue: '#0074ca',
 };
 
-export const regexp = {
-	login: /([\`\~\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\<\.\>\/\?])/ig
-}
-
+export const REGEXPS = {
+	// eslint-disable-next-line
+	LOGIN_REGEXP: /([\`\~\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\<\.\>\/\?])/gi,
+};

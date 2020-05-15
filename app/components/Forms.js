@@ -33,6 +33,7 @@ export const Input = styled.input`
 	&:active,
 	&:focus,
 	&:focus:active {
-		border-color: ${({ hasError }) => (hasError ? 'red' : COLORS.lightblue)};
+		border-color: ${({ hasError }) =>
+			hasError ? 'red' : COLORS.secondaryBlue};
 	}
 `;
