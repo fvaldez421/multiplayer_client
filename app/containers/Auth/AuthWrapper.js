@@ -15,7 +15,12 @@ import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectAuth from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { loginRequest, signupRequest } from './actions';
+import {
+	loginRequest,
+	signupRequest,
+	restoreSession,
+	endSession,
+} from './actions';
 
 export function AuthWrapperBase({ WrappedComponent, ...props }) {
 	useInjectReducer({ key: 'auth', reducer });
@@ -33,8 +38,9 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
 	signupRequest,
 	loginRequest,
+	restoreSession,
+	endSession,
 };
-
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const AuthWrapper = compose(withConnect)(AuthWrapperBase);

@@ -4,24 +4,35 @@
  *
  */
 import produce from 'immer';
-import { setItem } from '../../utils/webStorage';
-import { DEFAULT_ACTION, SIGNUP_RESULT } from './constants';
+import { setAuth, getAuth } from '../../utils/webStorage';
+import {
+	DEFAULT_ACTION,
+	SIGNUP_RESULT,
+	RESTORE_SESSION,
+	END_SESSION,
+} from './constants';
 
 export const initialState = {
 	username: '',
-	tempUuid: '',
+	uuid: '',
+	message: '',
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const authReducer = (state = initialState, action) =>
+const authReducer = (state = initialState, action = { data: {} }) =>
 	produce(state, (draft) => {
 		switch (action.type) {
 			case SIGNUP_RESULT:
-				setItem('tempUuid', action?.data?.uuid);
-				setItem('sessionToken', action?.data?.token);
-				draft.username = action?.data?.username;
-				draft.tempUuid = action?.data?.uuid;
-				draft.sessionToken = action?.data?.token;
+				setAuth(action?.data);
+				draft = { ...draft, ...action.data };
+				break;
+			case RESTORE_SESSION:
+				const { username, uuid, token } = getAuth();
+				if (token || uuid) draft = { ...draft, username, uuid, token };
+				break;
+			case END_SESSION:
+				setAuth({});
+				draft = {};
 				break;
 			case DEFAULT_ACTION:
 				break;

@@ -198,7 +198,7 @@ const FormBuilder = ({
 				</>
 			))}
 			<PrimaryButton id="FormSubmit" type="submit">
-				Login
+				{isLogin ? 'Login' : 'Signup'}
 			</PrimaryButton>
 		</StyledForm>
 	);

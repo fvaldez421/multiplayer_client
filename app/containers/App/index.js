@@ -6,7 +6,8 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -20,8 +21,15 @@ import LandingPage from '../LandingPage';
 import HomePage from '../HomePage';
 import AdminPage from '../AdminPage';
 import Navigation from '../../components/Navigation';
+import {
+	VerifiedRoute,
+	AuthedRoute,
+	AuthedRedirect,
+	UnauthedRoute,
+} from '../../components/AuthRoutes';
 import makeSelectHomePage from '../HomePage/selectors';
-import { VerifiedRoute, AuthedRoute } from '../../components/AuthRoutes';
+import makeSelectAuth from '../Auth/selectors';
+import { restoreSession } from '../Auth/actions';
 
 const AppWrapper = styled.div`
 	display: flex;
@@ -32,35 +40,55 @@ const AppWrapper = styled.div`
 	background-color: lemonchiffon;
 `;
 
-const App = ({ location = {} }) => (
-	<AppWrapper>
-		<Navigation location={location} />
-		<Helmet titleTemplate="%s - End of Time" defaultTitle="End of Time">
-			<meta name="description" content="A series of multiplayer games." />
-		</Helmet>
-		<Switch>
-			<Route exact path="/landing" component={LandingPage} />
+const App = ({ location = {}, auth = {}, restoreSession }) => {
+	useEffect(() => {
+		console.log('%ccomponentDidMount!', 'color: yellow;');
+		// attempt to restore session here
+		restoreSession();
+	}, []);
 
-			<AuthedRoute exact path="/home" component={HomePage} />
-			<VerifiedRoute exact path="/admin" component={AdminPage} />
+	return (
+		<AppWrapper>
+			<GlobalStyle />
+			<Navigation location={location} />
+			<Helmet titleTemplate="%s - End of Time" defaultTitle="End of Time">
+				<meta name="description" content="A series of multiplayer games." />
+			</Helmet>
+			<Switch>
+				<UnauthedRoute
+					exact
+					path="/landing"
+					authedPath="/home"
+					component={LandingPage}
+					auth={auth}
+				/>
 
-			<Redirect from="/" to="/landing" />
-			<Route path="*" component={NotFoundPage} />
-		</Switch>
-		<GlobalStyle />
-	</AppWrapper>
-);
+				<AuthedRoute exact path="/home" component={HomePage} auth={auth} />
+				<VerifiedRoute exact path="/admin" component={AdminPage} auth={auth} />
+
+				<AuthedRedirect from="/" authedTo="/home" defaultTo="/landing" />
+				<Redirect from="/" to="/landing" />
+				<Route path="*" component={NotFoundPage} />
+			</Switch>
+		</AppWrapper>
+	);
+};
+
+App.propTypes = {
+	location: PropTypes.object,
+	auth: PropTypes.object,
+	restoreSession: PropTypes.func,
+};
 
 const mapStateToProps = createStructuredSelector({
+	auth: makeSelectAuth(),
 	homePage: makeSelectHomePage(),
 	location: (state) => state.router.location,
 });
 
-function mapDispatchToProps(dispatch) {
-	return {
-		dispatch,
-	};
-}
+const mapDispatchToProps = {
+	restoreSession,
+};
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 

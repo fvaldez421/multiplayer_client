@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { put } from 'redux-saga/effects';
 
 /**
  * BaseApi class
@@ -16,16 +15,11 @@ class BaseApi {
 	/**
 	 * Standard GET request
 	 * @param {String} urlPath
-	 * @param {Function} success
-	 * @param {Function} [error]
 	 */
-	*get(urlPath, success = (_) => _, error = (_) => _) {
+	async get(urlPath) {
 		if (!this.hostname) console.error(`[BaseApi Error]: no hostname provided`);
 		try {
-			const res = yield axios.get(`${this.hostname}/api${urlPath}`);
-			if (!res.status || res.status === 200) yield put(success(res));
-			yield put(error(res));
-			return res;
+			return await axios.get(`${this.hostname}/api${urlPath}`);
 		} catch (e) {
 			console.error(`[BaseApi Error]: ${e}`);
 			return {};
@@ -36,16 +30,11 @@ class BaseApi {
 	 * Standard PUT request
 	 * @param {String} urlPath
 	 * @param {Object} [body]
-	 * @param {Function} success
-	 * @param {Function} [error]
 	 */
-	*put(urlPath, body = {}, success = (_) => _, error = (_) => _) {
+	async put(urlPath, body = {}) {
 		if (!this.hostname) console.error(`[BaseApi Error]: no hostname provided`);
 		try {
-			const res = yield axios.put(`${this.hostname}/api${urlPath}`, body);
-			if (!res.status || res.status === 200) yield put(success(res));
-			yield put(error(res));
-			return res;
+			return await axios.put(`${this.hostname}/api${urlPath}`, body);
 		} catch (e) {
 			console.error(`[BaseApi Error]: ${e}`);
 			return {};
@@ -56,16 +45,11 @@ class BaseApi {
 	 * Standard POST request
 	 * @param {String} urlPath
 	 * @param {Object} [body]
-	 * @param {Function} success
-	 * @param {Function} [error]
 	 */
-	*post(urlPath, body = {}, success = (_) => _, error = (_) => _) {
+	async post(urlPath, body = {}) {
 		if (!this.hostname) console.error(`[BaseApi Error]: no hostname provided`);
 		try {
-			const res = yield axios.post(`${this.hostname}/api${urlPath}`, body);
-			if (!res.status || res.status === 200) yield put(success(res));
-			yield put(error(res));
-			return res;
+			return await axios.post(`${this.hostname}/api${urlPath}`, body);
 		} catch (e) {
 			console.error(`[BaseApi Error]: ${e}`);
 			return {};
@@ -75,16 +59,11 @@ class BaseApi {
 	/**
 	 * Standard DELETE request
 	 * @param {String} urlPath
-	 * @param {Function} success
-	 * @param {Function} [error]
 	 */
-	*delete(urlPath, success = (_) => _, error = (_) => _) {
+	async delete(urlPath) {
 		if (!this.hostname) console.error(`[BaseApi Error]: no hostname provided`);
 		try {
-			const res = yield axios.delete(`${this.hostname}/api${urlPath}`);
-			if (!res.status || res.status === 200) yield put(success(res));
-			yield put(error(res));
-			return res;
+			return await axios.delete(`${this.hostname}/api${urlPath}`);
 		} catch (e) {
 			console.error(`[BaseApi Error]: ${e}`);
 			return {};

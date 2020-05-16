@@ -5,44 +5,50 @@
  */
 
 import {
-	DEFAULT_ACTION,
 	SIGNUP_REQUEST,
 	SIGNUP_RESULT,
 	LOGIN_REQUEST,
 	LOGIN_RESULT,
+	RESTORE_SESSION,
+	END_SESSION,
 } from './constants';
 
-export function defaultAction() {
+export function restoreSession() {
 	return {
-		type: DEFAULT_ACTION,
+		type: RESTORE_SESSION,
+	};
+}
+
+export function endSession() {
+	return {
+		type: END_SESSION,
 	};
 }
 
 export function signupRequest(params) {
 	return {
-		params,
 		type: SIGNUP_REQUEST,
+		params,
 	};
 }
 
 export function signupResult(res) {
-	console.log(res.data);
 	return {
-		data: res?.data,
 		type: SIGNUP_RESULT,
+		data: res?.data,
 	};
 }
 
 export function loginRequest(params) {
 	return {
-		params,
 		type: LOGIN_REQUEST,
+		params,
 	};
 }
 
 export function loginResult(res) {
 	return {
-		data: res?.data,
 		type: LOGIN_RESULT,
+		data: res?.data,
 	};
 }
