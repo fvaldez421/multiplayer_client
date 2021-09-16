@@ -140,7 +140,7 @@
 		"react-app-polyfill": "1.0.6",
 		"rimraf": "3.0.2",
 		"serialize-javascript": ">=3.0.0",
-		"set-value": "^3.0.2",
+		"set-value": "^4.0.1",
 		"shelljs": "^0.8.4",
 		"style-loader": "1.2.1",
 		"stylelint": "13.3.3",
